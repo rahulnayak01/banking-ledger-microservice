@@ -49,22 +49,19 @@ public class TransactionSearchService {
     }
 
     public List<TransactionDocument> searchText(String q) {
+
         Query query = new BoolQuery.Builder()
                 .should(s -> s.multiMatch(mm -> mm
                         .query(q)
-                        .fields("transactionType", "status", "currency",
-                                "debitAccountNumber", "creditAccountNumber")
+                        .fields(
+                                "transactionType",
+                                "status",
+                                "currency",
+                                "debitAccountNumber",
+                                "creditAccountNumber"
+                        )
+                        .fuzziness("AUTO")
                         .type(TextQueryType.BestFields)
-                ))
-                .should(s -> s.fuzzy(f -> f
-                        .field("debitAccountNumber")
-                        .value(q)
-                        .fuzziness("AUTO")
-                ))
-                .should(s -> s.fuzzy(f -> f
-                        .field("creditAccountNumber")
-                        .value(q)
-                        .fuzziness("AUTO")
                 ))
                 .minimumShouldMatch("1")
                 .build()
@@ -75,7 +72,10 @@ public class TransactionSearchService {
                 .build();
 
         SearchHits<TransactionDocument> hits =
-                elasticsearchOperations.search(nativeQuery, TransactionDocument.class);
+                elasticsearchOperations.search(
+                        nativeQuery,
+                        TransactionDocument.class
+                );
 
         return hits.stream()
                 .map(hit -> hit.getContent())
