@@ -1,0 +1,17 @@
+package com.example.ledger;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@EnableScheduling
+@EnableCaching
+@SpringBootApplication
+public class LedgerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(LedgerApplication.class, args);
+	}
+
+}
